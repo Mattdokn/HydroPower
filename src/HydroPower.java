@@ -10,9 +10,11 @@ public class HydroPower {
     public static final float PI = 3.14159265359f;
     /** water density constant (kg/m^3) */
     public static final int WATER_DENSITY = 997;
+    /** How many watts are in a single megawatt */
+    public static final int WATTS_IN_MEGAWATT = 1000000;
     
     public static final int VEL_MIN = 1;
-    public static final int VEL_MAX = 7;
+    public static final int VEL_MAX = 10;
     
     public static final int HEAD_MIN = 5;
     public static final int HEAD_MAX = 100;
@@ -35,9 +37,12 @@ public class HydroPower {
         System.out.println();
         printHeader();
         
-        for (int vel = VEL_MIN; vel <= VEL_MAX; vel++) {
-            for (int head = HEAD_MIN; head <= HEAD_MAX; head += HEAD_INCREMENT) {
-                
+        for (int head = HEAD_MIN; head <= HEAD_MAX; head += HEAD_INCREMENT) {
+            System.out.printf("\n %8d |   ", head);
+            for (int vel = VEL_MIN; vel <= VEL_MAX; vel++) {
+                double waterFlow = flowRate(vel, pipeDiameter);
+                double powerOutput = hydroPower(waterFlow, head) / WATTS_IN_MEGAWATT;
+                System.out.printf("%5.1f ", powerOutput);
             }
         }
     }
@@ -47,7 +52,7 @@ public class HydroPower {
     public static void printHeader() {
         System.out.println();
         System.out.println("                   HydroElectric                               ");
-        System.out.println("                     Power (kW)                                ");
+        System.out.println("                     Power (MW)                                ");
         System.out.println("                                                               ");
         System.out.println("                Water Velocity (m/s)                         \n");
         System.out.print(" Head (m) |");
